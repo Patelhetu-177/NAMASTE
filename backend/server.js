@@ -13,10 +13,6 @@ connectDB();
 const app = express();
 app.use(express.json());
 
-// Optional default route for root path (/)
-// app.get("/", (req, res) => {
-//     res.send("Welcome to your API!"); // Or any desired response
-// });
 
 // API routes
 app.use("/api/user", userRoutes);
@@ -67,6 +63,7 @@ const io = require("socket.io")(server, {
     pingTimeout: 60000,
     cors: {
         origin: "http://localhost:3000",
+        // methods: ["GET", "POST"]
         // credentials: true,
     },
 });
@@ -88,7 +85,7 @@ io.on("connection", (socket) => {
     socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 
     socket.on("new message", (newMessageRecieved) => {
-        const chat = newMessageRecieved.chat;
+        var chat = newMessageRecieved.chat;
 
         if (!chat.users) return console.log("chat.users not defined");
 
